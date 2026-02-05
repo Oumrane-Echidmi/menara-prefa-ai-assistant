@@ -1,45 +1,81 @@
-# Ménara Préfa AI Assistant
+# Ménara Préfa AI Assistant 🤖🏗️
 
-This project is a web application featuring an AI-powered chatbot for **Ménara Préfa**, designed to answer questions about products, expertise, and services.
+![Ménara Préfa Logo](https://menara-prefa.com/wp-content/uploads/2023/12/logo-menara-prefa.png)
 
-## Project Structure
+An intelligent customer support chatbot designed for **Ménara Préfa**, a leader in the construction materials industry in Morocco. This application leverages the power of **Google Gemini AI** to provide instant responses regarding products, services, and technical expertise.
 
-The project follows a standard split structure:
+## 🚀 Features
 
-- **backend/**: Spring Boot (Java 25) application.
-  - Contains `src/main/java`, `pom.xml`, etc.
-  - Exposes REST APIs.
-- **frontend/**: React (Vite + TypeScript) application.
-  - Contains `src/`, `package.json`, etc.
-  - Consumes the Spring Boot API.
+- **AI-Powered Chat**: Seamless conversation with a context-aware AI assistant (Google Gemini 1.5 Flash).
+- **Product Knowledge**: Trained on Ménara Préfa's catalog (Agglos, Hourdis, Concrete, etc.).
+- **Modern UI**: A responsive, clean, and professional interface built with React & TypeScript.
+- **Robust Backend**: Scalable Spring Boot architecture.
 
-## Prerequisites
+## 🛠️ Technology Stack
 
-- **Java**: JDK 25 or higher
-- **Node.js**: v18 or higher
-- **Maven**: (Wrapper included in `backend/mvnw`)
-- **API Key**: Ensure `GOOGLE_API_KEY` is set.
+### Backend ☕
 
-## Setup & Running
+- **Framework**: Spring Boot 3.5.9
+- **Language**: Java 25 (Preview features may be enabled)
+- **AI Integration**: Spring AI (Google Gemini)
+- **Build Tool**: Maven
 
-### 1. Backend (Spring Boot)
+### Frontend ⚛️
 
-Navigate to the `backend` directory and run:
+- **Framework**: React 19
+- **Build Tool**: Vite
+- **Language**: TypeScript
+- **Styling**: Custom CSS with Responsive Design
+
+## 📂 Project Structure
+
+The repository is organized into two main synchronized directories:
+
+```
+📦 menara-prefa-ai-assistant
+├── 📂 backend           # Spring Boot Application
+│   ├── src/main/java   # Source Code
+│   └── pom.xml         # Maven Dependencies
+├── 📂 frontend          # React Application
+│   ├── src/            # Components, Pages, Assets
+│   └── package.json    # Node Dependencies
+└── README.md           # Documentation
+```
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
+
+- Java JDK 25+
+- Node.js v18+
+- Maven (Wrapper included)
+- Google Cloud API Key (Gemini)
+
+### 1️⃣ Backend Setup
+
+Navigate to the `backend` folder and run the Spring Boot server.
+
+**Linux/Mac:**
 
 ```bash
 cd backend
-# Linux/Mac
+export GOOGLE_API_KEY=your_api_key_here
 ./mvnw spring-boot:run
+```
 
-# Windows
+**Windows:**
+
+```powershell
+cd backend
+$env:GOOGLE_API_KEY="your_api_key_here"
 .\mvnw spring-boot:run
 ```
 
-The server will start on `http://localhost:8080`.
+_The backend runs on `http://localhost:8080`_
 
-### 2. Frontend (React)
+### 2️⃣ Frontend Setup
 
-Open a new terminal, navigate to the `frontend` folder:
+Open a new terminal, navigate to the `frontend` folder, install dependencies, and start the dev server.
 
 ```bash
 cd frontend
@@ -47,22 +83,12 @@ npm install
 npm run dev
 ```
 
-The frontend will start on `http://localhost:5173`.
+_The frontend runs on `http://localhost:5173`_
 
-## Architecture Standards
+## 🔒 Security Note
 
-- **Service Layer Pattern**: Business logic is encapsulated in `AiService`, keeping Controllers clean.
-- **DTOs**: `ChatRequest` and `ChatResponse` are used for clear API contracts.
-- **React Components**: The frontend uses small, reusable components (`ChatMessage`, `ChatInput`) and defined Services (`ai.service.ts`).
-
-## Deployment
-
-To prepare for deployment/git upload:
-
-1. Ensure `.gitignore` is properly configured (already done).
-2. Build the frontend (`npm run build`).
-3. Package the Spring Boot app (`./mvnw package`).
+This project uses environment variables for sensitive keys. Never commit your `GOOGLE_API_KEY` to public repositories.
 
 ---
 
-Start coding with standard norms! 🚀
+**© 2026 Oumrane Echidmi** - Developed for Ménara Préfa.
