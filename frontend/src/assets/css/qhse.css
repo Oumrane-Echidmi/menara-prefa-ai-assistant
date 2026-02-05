@@ -1,0 +1,293 @@
+:root {
+  --primary-red: #c41e3a;
+  --secondary-gray: #6c757d;
+  --dark-anthracite: #2c3e50;
+  --light-gray: #f8f9fa;
+  --concrete-gray: #95a5a6;
+  --success-green: #27ae60;
+  --warning-orange: #e67e22;
+}
+
+/* Section Title */
+.section-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: var(--dark-anthracite);
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background-color: var(--primary-red);
+}
+
+.section-title.center::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ISO Banner */
+.iso-banner {
+  background: linear-gradient(135deg, var(--success-green), #229954);
+  color: white;
+  border-radius: 15px;
+  padding: 40px;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.iso-banner .icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.iso-banner h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Axe Strategy Cards */
+.axe-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  height: 100%;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+  border-top: 4px solid var(--primary-red);
+  position: relative;
+  overflow: visible;
+  margin-top: 25px; /* Space for the floating number */
+}
+
+.axe-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.axe-card .axe-number {
+  position: absolute;
+  top: -20px;
+  left: 30px;
+  width: 50px;
+  height: 50px;
+  background: var(--primary-red);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(196, 30, 58, 0.3);
+}
+
+.axe-card .icon {
+  font-size: 3rem;
+  color: var(--primary-red);
+  margin: 20px 0 15px;
+  display: block;
+}
+
+.axe-card h4 {
+  color: var(--dark-anthracite);
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.axe-card p {
+  color: var(--secondary-gray);
+  margin-bottom: 0;
+}
+
+/* Quality Lab Section */
+.quality-lab {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border-radius: 15px;
+  padding: 50px;
+  margin: 50px 0;
+}
+
+.quality-lab h3 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.quality-feature {
+  display: flex;
+  align-items: start;
+  margin-bottom: 20px;
+}
+
+.quality-feature i {
+  font-size: 1.8rem;
+  margin-right: 15px;
+  min-width: 30px;
+}
+
+.quality-feature div h5 {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+/* Commitments Section */
+.commitment-item {
+  background: white;
+  border-left: 4px solid var(--success-green);
+  padding: 20px 25px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.commitment-item:hover {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transform: translateX(5px);
+}
+
+.commitment-item i {
+  color: var(--success-green);
+  font-size: 1.5rem;
+  margin-right: 15px;
+}
+
+/* Stats Section */
+.stats-section {
+  background: var(--light-gray);
+  border-radius: 15px;
+  padding: 40px;
+  margin: 50px 0;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 20px;
+}
+
+.stat-item .stat-number {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--primary-red);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.stat-item .stat-label {
+  font-size: 1rem;
+  color: var(--secondary-gray);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Process Timeline */
+.timeline {
+  position: relative;
+  padding: 20px 0;
+}
+
+.timeline-item {
+  display: flex;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: 25px;
+  top: 50px;
+  width: 2px;
+  height: calc(100% - 20px);
+  background: var(--concrete-gray);
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--primary-red);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-right: 20px;
+  z-index: 1;
+}
+
+.timeline-content {
+  flex-grow: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.timeline-content h5 {
+  color: var(--dark-anthracite);
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Certifications Grid */
+.certification-badge {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s;
+}
+
+.certification-badge:hover {
+  transform: scale(1.05);
+}
+
+.certification-badge i {
+  font-size: 4rem;
+  color: var(--primary-red);
+  margin-bottom: 15px;
+}
+
+.certification-badge h5 {
+  font-weight: bold;
+  color: var(--dark-anthracite);
+  margin-bottom: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .iso-banner {
+    padding: 30px 20px;
+  }
+
+  .iso-banner h2 {
+    font-size: 1.8rem;
+  }
+
+  .quality-lab {
+    padding: 30px 20px;
+  }
+
+  .axe-card {
+    margin-bottom: 40px;
+  }
+}
