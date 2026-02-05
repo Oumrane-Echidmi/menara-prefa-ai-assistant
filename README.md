@@ -1,6 +1,6 @@
 # Ménara Préfa AI Assistant 🤖🏗️
 
-![Ménara Préfa Logo](https://menara-prefa.com/wp-content/uploads/2023/12/logo-menara-prefa.png)
+<img width="300" height="85" alt="image" src="https://github.com/user-attachments/assets/463de2ff-db2d-4297-99db-2d7b69e71a52" />
 
 An intelligent customer support chatbot designed for **Ménara Préfa**, a leader in the construction materials industry in Morocco. This application leverages the power of **Google Gemini AI** to provide instant responses regarding products, services, and technical expertise.
 
