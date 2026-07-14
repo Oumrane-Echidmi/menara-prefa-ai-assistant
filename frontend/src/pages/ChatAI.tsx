@@ -30,7 +30,6 @@ const ChatAI: React.FC = () => {
         const messageText = text.trim();
         if (!messageText) return;
 
-        // Add user message
         const userMsg: Message = { id: Date.now(), text: messageText, sender: 'user' };
         setMessages(prev => [...prev, userMsg]);
         setIsLoading(true);
@@ -40,16 +39,16 @@ const ChatAI: React.FC = () => {
             const responseText = await sendMessageToAi(messageText);
             const aiMsg: Message = { id: Date.now() + 1, text: responseText, sender: 'ai' };
             setMessages(prev => [...prev, aiMsg]);
-
-        } catch (err: any) {
-            console.error("Erreur lors de l'envoi du message:", err);
-            const errorMsg: Message = { 
-                id: Date.now() + 1, 
-                text: "Désolé, une erreur est survenue. Veuillez réessayer plus tard.", 
-                sender: 'ai' 
+        } catch (err: unknown) {
+            const errorDetail = err instanceof Error ? err.message : 'Erreur inconnue';
+            console.error("Erreur lors de l'envoi du message:", errorDetail);
+            const errorMsg: Message = {
+                id: Date.now() + 1,
+                text: "Désolé, une erreur est survenue. Veuillez réessayer plus tard.",
+                sender: 'ai'
             };
             setMessages(prev => [...prev, errorMsg]);
-            setError("Échec de la communication avec le backend.");
+            setError(`Échec de la communication avec le backend : ${errorDetail}`);
             setTimeout(() => setError(null), 5000);
         } finally {
             setIsLoading(false);
@@ -60,39 +59,61 @@ const ChatAI: React.FC = () => {
         <div className="chat-container">
             <div className="chat-header">
                 <h4>
-                    <i className="bi bi-robot me-2"></i>
+                    <i className="bi bi-robot me-2" aria-hidden="true"></i>
                     Assistant IA Ménara Préfa
                 </h4>
-                <div className="status">
-                    <span className="status-dot"></span>
+                <div className="status" aria-label="Statut de l'assistant">
+                    <span className="status-dot" aria-hidden="true"></span>
                     En ligne
                 </div>
             </div>
 
             {error && (
-                <div className="error-alert" style={{ display: 'block' }}>
+                <div className="error-alert" style={{ display: 'block' }} role="alert">
                     <strong>Erreur :</strong> <span>{error}</span>
                 </div>
             )}
 
-            <div className="chat-messages" id="chatMessages" ref={chatMessagesRef}>
+            <div
+                className="chat-messages"
+                id="chatMessages"
+                ref={chatMessagesRef}
+                aria-live="polite"
+                aria-label="Messages de la conversation"
+            >
                 {messages.length === 0 && (
                     <div className="welcome-message">
-                        <i className="bi bi-chat-dots"></i>
+                        <i className="bi bi-chat-dots" aria-hidden="true"></i>
                         <h5>Bienvenue sur l'assistant IA de Ménara Préfa</h5>
                         <p>Posez-moi vos questions sur nos produits, services et expertises en matériaux de construction.</p>
 
                         <div className="suggestions">
-                            <button className="suggestion-btn" onClick={() => handleSendMessage('Quels sont vos produits disponibles ?')}>
+                            <button
+                                className="suggestion-btn"
+                                onClick={() => handleSendMessage('Quels sont vos produits disponibles ?')}
+                                disabled={isLoading}
+                            >
                                 Quels produits proposez-vous ?
                             </button>
-                            <button className="suggestion-btn" onClick={() => handleSendMessage('Parlez-moi des agglos à bancher')}>
+                            <button
+                                className="suggestion-btn"
+                                onClick={() => handleSendMessage('Parlez-moi des agglos à bancher')}
+                                disabled={isLoading}
+                            >
                                 Agglos à bancher
                             </button>
-                            <button className="suggestion-btn" onClick={() => handleSendMessage('Où êtes-vous implantés ?')}>
+                            <button
+                                className="suggestion-btn"
+                                onClick={() => handleSendMessage('Où êtes-vous implantés ?')}
+                                disabled={isLoading}
+                            >
                                 Vos implantations
                             </button>
-                            <button className="suggestion-btn" onClick={() => handleSendMessage('Comment demander un devis ?')}>
+                            <button
+                                className="suggestion-btn"
+                                onClick={() => handleSendMessage('Comment demander un devis ?')}
+                                disabled={isLoading}
+                            >
                                 Demander un devis
                             </button>
                         </div>

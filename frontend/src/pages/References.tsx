@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../assets/css/references.css';
+import { clients } from '../data/clients';
 
 const References: React.FC = () => {
     return (
@@ -54,79 +55,18 @@ const References: React.FC = () => {
             {/* Clients Logos */}
             <section className="container mb-5">
                 <h2 className="section-title center text-center">Nos Clients de Référence</h2>
-                
+
                 <div className="row g-4">
-                    <div className="col-lg-3 col-md-4 col-6">
-                        <div className="client-card">
-                            <div className="logo-placeholder">
-                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--dark-anthracite)' }}>SOMAGEC</span>
+                    {clients.map((client) => (
+                        <div key={client.name} className="col-lg-3 col-md-4 col-6">
+                            <div className="client-card">
+                                <div className="logo-placeholder">
+                                    <span style={{ fontSize: client.name.length > 6 ? '1.3rem' : '1.5rem', fontWeight: 'bold', color: 'var(--dark-anthracite)' }}>{client.name}</span>
+                                </div>
+                                <h5>{client.name}</h5>
                             </div>
-                            <h5>SOMAGEC</h5>
                         </div>
-                    </div>
-                    
-                    <div className="col-lg-3 col-md-4 col-6">
-                        <div className="client-card">
-                            <div className="logo-placeholder">
-                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--dark-anthracite)' }}>TGCC</span>
-                            </div>
-                            <h5>TGCC</h5>
-                        </div>
-                    </div>
-                    
-                    <div className="col-lg-3 col-md-4 col-6">
-                        <div className="client-card">
-                            <div className="logo-placeholder">
-                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--dark-anthracite)' }}>BYMARO</span>
-                            </div>
-                            <h5>BYMARO</h5>
-                        </div>
-                    </div>
-                    
-                    <div className="col-lg-3 col-md-4 col-6">
-                        <div className="client-card">
-                            <div className="logo-placeholder">
-                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--dark-anthracite)' }}>S.G.T.M</span>
-                            </div>
-                            <h5>S.G.T.M</h5>
-                        </div>
-                    </div>
-                    
-                    <div className="col-lg-3 col-md-4 col-6">
-                        <div className="client-card">
-                            <div className="logo-placeholder">
-                                <span style={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'var(--dark-anthracite)' }}>SOGEA Maroc</span>
-                            </div>
-                            <h5>SOGEA Maroc</h5>
-                        </div>
-                    </div>
-                    
-                    <div className="col-lg-3 col-md-4 col-6">
-                        <div className="client-card">
-                            <div className="logo-placeholder">
-                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--dark-anthracite)' }}>STAM</span>
-                            </div>
-                            <h5>STAM</h5>
-                        </div>
-                    </div>
-                    
-                    <div className="col-lg-3 col-md-4 col-6">
-                        <div className="client-card">
-                            <div className="logo-placeholder">
-                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--dark-anthracite)' }}>COVEC</span>
-                            </div>
-                            <h5>COVEC</h5>
-                        </div>
-                    </div>
-                    
-                    <div className="col-lg-3 col-md-4 col-6">
-                        <div className="client-card">
-                            <div className="logo-placeholder">
-                                <span style={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'var(--dark-anthracite)' }}>CGI Maroc</span>
-                            </div>
-                            <h5>CGI Maroc</h5>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </section>
 
@@ -134,35 +74,35 @@ const References: React.FC = () => {
             <section className="bg-light py-5">
                 <div className="container">
                     <h2 className="section-title center text-center">Secteurs d'Activité</h2>
-                    
+
                     <div className="row g-4">
                         <div className="col-lg-3 col-md-6">
                             <div className="sector-item">
-                                <i className="bi bi-buildings"></i>
+                                <i className="bi bi-buildings" aria-hidden="true"></i>
                                 <h5>Immobilier</h5>
                                 <p>Résidences, immeubles, complexes résidentiels</p>
                             </div>
                         </div>
-                        
+
                         <div className="col-lg-3 col-md-6">
                             <div className="sector-item">
-                                <i className="bi bi-hammer"></i>
+                                <i className="bi bi-hammer" aria-hidden="true"></i>
                                 <h5>Travaux Publics</h5>
                                 <p>Routes, ponts, infrastructures urbaines</p>
                             </div>
                         </div>
-                        
+
                         <div className="col-lg-3 col-md-6">
                             <div className="sector-item">
-                                <i className="bi bi-building"></i>
+                                <i className="bi bi-building" aria-hidden="true"></i>
                                 <h5>Commercial</h5>
                                 <p>Centres commerciaux, bureaux, hôtels</p>
                             </div>
                         </div>
-                        
+
                         <div className="col-lg-3 col-md-6">
                             <div className="sector-item">
-                                <i className="bi bi-hospital"></i>
+                                <i className="bi bi-hospital" aria-hidden="true"></i>
                                 <h5>Institutionnel</h5>
                                 <p>Écoles, hôpitaux, administrations</p>
                             </div>
@@ -174,7 +114,7 @@ const References: React.FC = () => {
             {/* Project Showcase */}
             <section className="container my-5">
                 <h2 className="section-title center text-center">Projets Réalisés</h2>
-                
+
                 <div className="row g-4">
                     {/* Project 1 */}
                     <div className="col-lg-4 col-md-6">
@@ -185,10 +125,10 @@ const References: React.FC = () => {
                             <div className="project-body p-3 bg-white border-bottom border-start border-end rounded-bottom">
                                 <h5 className="fw-bold text-dark">Résidences Al Manzah</h5>
                                 <div className="project-meta text-muted mb-2">
-                                    <i className="bi bi-geo-alt-fill text-danger me-2"></i>Marrakech
+                                    <i className="bi bi-geo-alt-fill text-danger me-2" aria-hidden="true"></i>Marrakech
                                 </div>
                                 <div className="project-meta text-muted mb-2">
-                                    <i className="bi bi-calendar3 text-danger me-2"></i>2023
+                                    <i className="bi bi-calendar3 text-danger me-2" aria-hidden="true"></i>2023
                                 </div>
                                 <div className="mt-3">
                                     <span className="badge bg-danger">Agglos</span>
@@ -198,7 +138,7 @@ const References: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* Project 2 */}
                     <div className="col-lg-4 col-md-6">
                         <div className="project-card h-100">
@@ -206,12 +146,12 @@ const References: React.FC = () => {
                                  <img src="/assets/img/beton.jpeg" alt="Voie Rapide Safi" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             </div>
                              <div className="project-body p-3 bg-white border-bottom border-start border-end rounded-bottom">
-                                <h5 className="fw-bold"><a href="#" className="text-dark text-decoration-none">Voie Rapide Safi</a></h5>
+                                <h5 className="fw-bold text-dark">Voie Rapide Safi</h5>
                                 <div className="project-meta text-muted mb-2">
-                                    <i className="bi bi-geo-alt-fill text-danger me-2"></i>Safi
+                                    <i className="bi bi-geo-alt-fill text-danger me-2" aria-hidden="true"></i>Safi
                                 </div>
                                 <div className="project-meta text-muted mb-2">
-                                    <i className="bi bi-calendar3 text-danger me-2"></i>2022
+                                    <i className="bi bi-calendar3 text-danger me-2" aria-hidden="true"></i>2022
                                 </div>
                                 <div className="mt-3">
                                     <span className="badge bg-danger">Béton Prêt</span>
@@ -220,7 +160,7 @@ const References: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* Project 3 */}
                     <div className="col-lg-4 col-md-6">
                         <div className="project-card h-100">
@@ -230,10 +170,10 @@ const References: React.FC = () => {
                             <div className="project-body p-3 bg-white border-bottom border-start border-end rounded-bottom">
                                 <h5 className="fw-bold text-dark">Centre Commercial Atlas</h5>
                                 <div className="project-meta text-muted mb-2">
-                                    <i className="bi bi-geo-alt-fill text-danger me-2"></i>Béni Mellal
+                                    <i className="bi bi-geo-alt-fill text-danger me-2" aria-hidden="true"></i>Béni Mellal
                                 </div>
                                 <div className="project-meta text-muted mb-2">
-                                    <i className="bi bi-calendar3 text-danger me-2"></i>2024
+                                    <i className="bi bi-calendar3 text-danger me-2" aria-hidden="true"></i>2024
                                 </div>
                                 <div className="mt-3">
                                     <span className="badge bg-danger">Agglos</span>
@@ -249,7 +189,7 @@ const References: React.FC = () => {
             {/* Testimonials */}
             <section className="container mb-5">
                 <h2 className="section-title center text-center">Témoignages</h2>
-                
+
                 <div className="row">
                     <div className="col-lg-6 mb-4">
                         <div className="testimonial-box">
@@ -258,7 +198,7 @@ const References: React.FC = () => {
                             </p>
                             <div className="author">
                                 <div className="author-icon">
-                                    <i className="bi bi-person"></i>
+                                    <i className="bi bi-person" aria-hidden="true"></i>
                                 </div>
                                 <div className="author-info">
                                     <h6>Ahmed Benali</h6>
@@ -267,7 +207,7 @@ const References: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     <div className="col-lg-6 mb-4">
                         <div className="testimonial-box">
                             <p className="quote">
@@ -275,7 +215,7 @@ const References: React.FC = () => {
                             </p>
                             <div className="author">
                                 <div className="author-icon">
-                                    <i className="bi bi-person"></i>
+                                    <i className="bi bi-person" aria-hidden="true"></i>
                                 </div>
                                 <div className="author-info">
                                     <h6>Fatima El Amrani</h6>
@@ -293,7 +233,7 @@ const References: React.FC = () => {
                     <h3>Rejoignez nos clients satisfaits</h3>
                     <p>Confiez-nous votre prochain projet de construction</p>
                     <Link to="/contact" className="btn btn-primary btn-lg">
-                        <i className="bi bi-envelope me-2"></i>Demander un devis
+                        <i className="bi bi-envelope me-2" aria-hidden="true"></i>Demander un devis
                     </Link>
                 </div>
             </section>

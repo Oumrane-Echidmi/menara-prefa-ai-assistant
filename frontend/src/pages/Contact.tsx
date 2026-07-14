@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
 import '../assets/css/contact.css';
 import L from 'leaflet';
 
-// Fix for default marker icon in React
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-let DefaultIcon = L.icon({
+import { implantations, mapCenter, mapZoom } from '../data/implantations';
+import { contactCards, formSubjects, initialFormData } from '../data/contact';
+import type { ContactFormData } from '../data/contact';
+
+const DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
     iconSize: [25, 41],
@@ -17,43 +20,51 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+/**
+ * Placeholder for backend integration.
+ * Replace this with a real API call when the backend endpoint is ready.
+ */
+async function submitContactForm(data: ContactFormData): Promise<void> {
+    // TODO: Replace with actual API call, e.g.:
+    // const response = await fetch(`${API_BASE}/api/contact`, {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(data),
+    // });
+    // if (!response.ok) throw new Error('Erreur serveur');
+    console.log('Contact form submitted:', data);
+    return new Promise(resolve => setTimeout(resolve, 1500));
+}
+
 const Contact: React.FC = () => {
-    const [formData, setFormData] = useState({
-        nom: '',
-        entreprise: '',
-        email: '',
-        telephone: '',
-        sujet: '',
-        message: '',
-        rgpd: false
-    });
+    const [formData, setFormData] = useState<ContactFormData>({ ...initialFormData });
     const [submitting, setSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
     const [validated, setValidated] = useState(false);
 
+    const mapContainerRef = useRef<HTMLDivElement>(null);
+    const mapInstanceRef = useRef<L.Map | null>(null);
+
     useEffect(() => {
-        // Initialize map
-        const mapContainer = document.getElementById('map');
-        if (mapContainer && !mapContainer.hasChildNodes()) {
-            const map = L.map('map').setView([31.63, -7.99], 6);
+        if (!mapContainerRef.current || mapInstanceRef.current) return;
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '© OpenStreetMap'
-            }).addTo(map);
+        const map = L.map(mapContainerRef.current).setView(mapCenter, mapZoom);
+        mapInstanceRef.current = map;
 
-            const implantations = [
-                { ville: "Marrakech", coords: [31.6295, -7.9811] as [number, number] },
-                { ville: "El Kelaâ des Sraghna", coords: [32.0482, -7.4069] as [number, number] },
-                { ville: "Safi", coords: [32.2994, -9.2372] as [number, number] },
-                { ville: "Béni Mellal", coords: [32.3372, -6.3498] as [number, number] },
-                { ville: "Khouribga", coords: [32.8865, -6.9209] as [number, number] }
-            ];
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
 
-            implantations.forEach(loc => {
-                L.marker(loc.coords).addTo(map).bindPopup(`<b>${loc.ville}</b>`);
-            });
-        }
+        implantations.forEach(loc => {
+            L.marker(loc.coords).addTo(map).bindPopup(`<b>${loc.ville}</b>`);
+        });
+
+        return () => {
+            map.remove();
+            mapInstanceRef.current = null;
+        };
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -62,7 +73,7 @@ const Contact: React.FC = () => {
         setFormData(prev => ({ ...prev, [name]: val }));
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
@@ -72,22 +83,21 @@ const Contact: React.FC = () => {
         }
 
         setSubmitting(true);
-        // Simulate API call
-        setTimeout(() => {
-            setSubmitting(false);
+        setSubmitError(null);
+
+        try {
+            await submitContactForm(formData);
             setSubmitSuccess(true);
-            setFormData({
-                nom: '',
-                entreprise: '',
-                email: '',
-                telephone: '',
-                sujet: '',
-                message: '',
-                rgpd: false
-            });
+            setFormData({ ...initialFormData });
             setValidated(false);
             setTimeout(() => setSubmitSuccess(false), 5000);
-        }, 1500);
+        } catch (err: unknown) {
+            const detail = err instanceof Error ? err.message : 'Erreur inconnue';
+            setSubmitError(`L'envoi a échoué : ${detail}`);
+            setTimeout(() => setSubmitError(null), 5000);
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -109,7 +119,7 @@ const Contact: React.FC = () => {
             {/* Alert Numéro Vert */}
             <section className="container mb-5">
                 <div className="alert-info-custom d-flex align-items-center">
-                    <i className="bi bi-telephone-fill"></i>
+                    <i className="bi bi-telephone-fill" aria-hidden="true"></i>
                     <div>
                         <h4 className="mb-1">Appelez notre Numéro Vert</h4>
                         <p className="mb-0"><strong style={{ fontSize: '1.5rem' }}>0801008010</strong> - Appel gratuit depuis tout le Maroc</p>
@@ -120,80 +130,29 @@ const Contact: React.FC = () => {
             {/* Contact Cards */}
             <section className="container mb-5">
                 <div className="row">
-                    {/* Siège Social */}
-                    <div className="col-lg-4 col-md-6 mb-4">
-                        <div className="contact-card">
-                            <div className="icon">
-                                <i className="bi bi-building"></i>
-                            </div>
-                            <h4 className="text-center">Siège Social</h4>
-                            <div className="text-center mb-3">
-                                <span className="badge bg-danger">Marrakech</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-geo-alt-fill"></i>
-                                <span>Route d'Agadir, BP 4741<br />Hay Massira, Marrakech, Maroc</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-telephone-fill"></i>
-                                <span>+212 524 49 99 00 à 15</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-envelope-fill"></i>
-                                <a href="mailto:infomarrakech@menara-prefa.ma">infomarrakech@menara-prefa.ma</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Bureau Commercial */}
-                    <div className="col-lg-4 col-md-6 mb-4">
-                        <div className="contact-card">
-                            <div className="icon">
-                                <i className="bi bi-briefcase"></i>
-                            </div>
-                            <h4 className="text-center">Bureau Commercial</h4>
-                            <div className="text-center mb-3">
-                                <span className="badge bg-danger">Devis & Commandes</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-envelope-fill"></i>
-                                <a href="mailto:b.commercial@menara-prefa.ma">b.commercial@menara-prefa.ma</a>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-clock-fill"></i>
-                                <span>Lun - Ven: 8h00 - 18h00<br />Sam: 8h00 - 13h00</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-file-earmark-text"></i>
-                                <span>Demande de devis sous 24h</span>
+                    {contactCards.map((card) => (
+                        <div key={card.title} className="col-lg-4 col-md-6 mb-4">
+                            <div className="contact-card">
+                                <div className="icon">
+                                    <i className={`bi ${card.icon}`} aria-hidden="true"></i>
+                                </div>
+                                <h4 className="text-center">{card.title}</h4>
+                                <div className="text-center mb-3">
+                                    <span className="badge bg-danger">{card.badgeLabel}</span>
+                                </div>
+                                {card.items.map((item, idx) => (
+                                    <div key={idx} className="contact-info">
+                                        <i className={`bi ${item.icon}`} aria-hidden="true"></i>
+                                        {item.href ? (
+                                            <a href={item.href}>{item.content}</a>
+                                        ) : (
+                                            <span dangerouslySetInnerHTML={{ __html: item.content.replace(/\n/g, '<br />') }} />
+                                        )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                    </div>
-
-                    {/* Service Technique */}
-                    <div className="col-lg-4 col-md-6 mb-4">
-                        <div className="contact-card">
-                            <div className="icon">
-                                <i className="bi bi-gear"></i>
-                            </div>
-                            <h4 className="text-center">Service Technique</h4>
-                            <div className="text-center mb-3">
-                                <span className="badge bg-danger">Support & Conseil</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-person-badge"></i>
-                                <span>Assistance technique<br />Études de projet</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-tools"></i>
-                                <span>Conseil en mise en œuvre</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-clipboard-check"></i>
-                                <span>Contrôle qualité</span>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </section>
 
@@ -203,69 +162,35 @@ const Contact: React.FC = () => {
 
                 <div className="row">
                     <div className="col-lg-6 mb-4">
-                        <div className="location-card">
-                            <h5><i className="bi bi-geo-fill me-2"></i>Site El Kelaâ des Sraghna</h5>
-                            <p className="mb-2"><strong>Production:</strong> Agglos, Hourdis, Pavés</p>
-                            <div className="contact-info mb-1">
-                                <i className="bi bi-telephone"></i>
-                                <span>+212 5XX XX XX XX</span>
+                        {implantations.filter(loc => loc.ville !== 'Marrakech').map((loc) => (
+                            <div key={loc.ville} className="location-card">
+                                <h5><i className="bi bi-geo-fill me-2" aria-hidden="true"></i>Site {loc.ville}</h5>
+                                <p className="mb-2"><strong>{loc.type === 'Distribution' ? 'Distribution:' : 'Production:'}</strong> {loc.production}</p>
+                                <div className="contact-info mb-1">
+                                    <i className="bi bi-telephone" aria-hidden="true"></i>
+                                    <span>{loc.telephone}</span>
+                                </div>
+                                <div className="contact-info">
+                                    <i className="bi bi-envelope" aria-hidden="true"></i>
+                                    <a href={`mailto:${loc.email}`}>{loc.email}</a>
+                                </div>
                             </div>
-                            <div className="contact-info">
-                                <i className="bi bi-envelope"></i>
-                                <a href="mailto:b.commercial@menara-prefa.ma">b.commercial@menara-prefa.ma</a>
-                            </div>
-                        </div>
-
-                        <div className="location-card">
-                            <h5><i className="bi bi-geo-fill me-2"></i>Site Safi</h5>
-                            <p className="mb-2"><strong>Production:</strong> Béton prêt à l'emploi, Agglos</p>
-                            <div className="contact-info mb-1">
-                                <i className="bi bi-telephone"></i>
-                                <span>+212 5XX XX XX XX</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-envelope"></i>
-                                <a href="mailto:b.commercial@menara-prefa.ma">b.commercial@menara-prefa.ma</a>
-                            </div>
-                        </div>
-
-                        <div className="location-card">
-                            <h5><i className="bi bi-geo-fill me-2"></i>Site Béni Mellal</h5>
-                            <p className="mb-2"><strong>Production:</strong> Béton prêt à l'emploi, Revêtements</p>
-                            <div className="contact-info mb-1">
-                                <i className="bi bi-telephone"></i>
-                                <span>+212 5XX XX XX XX</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-envelope"></i>
-                                <a href="mailto:b.commercial@menara-prefa.ma">b.commercial@menara-prefa.ma</a>
-                            </div>
-                        </div>
-
-                        <div className="location-card">
-                            <h5><i className="bi bi-geo-fill me-2"></i>Site Khouribga</h5>
-                            <p className="mb-2"><strong>Distribution:</strong> Agence commerciale</p>
-                            <div className="contact-info mb-1">
-                                <i className="bi bi-telephone"></i>
-                                <span>+212 5XX XX XX XX</span>
-                            </div>
-                            <div className="contact-info">
-                                <i className="bi bi-envelope"></i>
-                                <a href="mailto:b.commercial@menara-prefa.ma">b.commercial@menara-prefa.ma</a>
-                            </div>
-                        </div>
+                        ))}
                     </div>
 
                     <div className="col-lg-6">
-                        {/* Map Container */}
                         <div className="map-container" style={{ background: 'white', padding: '10px', borderRadius: '10px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
-                            <div id="map" style={{ height: '500px', width: '100%', borderRadius: '8px' }}></div>
+                            <div
+                                ref={mapContainerRef}
+                                style={{ height: '500px', width: '100%', borderRadius: '8px' }}
+                                aria-label="Carte des implantations Ménara Préfa"
+                            ></div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Contact Form (Wide) */}
+            {/* Contact Form */}
             <section className="container mb-5">
                 <h2 className="section-title text-center">Envoyez-nous un message</h2>
                 <div className="contact-form">
@@ -273,23 +198,23 @@ const Contact: React.FC = () => {
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="nom" className="form-label">Nom complet <span className="text-danger">*</span></label>
-                                <input 
-                                    type="text" 
-                                    className="form-control" 
-                                    id="nom" 
-                                    name="nom" 
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="nom"
+                                    name="nom"
                                     value={formData.nom}
                                     onChange={handleChange}
-                                    required 
+                                    required
                                 />
                                 <div className="invalid-feedback">Veuillez entrer votre nom.</div>
                             </div>
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="entreprise" className="form-label">Entreprise</label>
-                                <input 
-                                    type="text" 
-                                    className="form-control" 
-                                    id="entreprise" 
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="entreprise"
                                     name="entreprise"
                                     value={formData.entreprise}
                                     onChange={handleChange}
@@ -299,58 +224,55 @@ const Contact: React.FC = () => {
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="email" className="form-label">Email <span className="text-danger">*</span></label>
-                                <input 
-                                    type="email" 
-                                    className="form-control" 
-                                    id="email" 
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    id="email"
                                     name="email"
                                     value={formData.email}
-                                    onChange={handleChange} 
-                                    required 
+                                    onChange={handleChange}
+                                    required
                                 />
                                 <div className="invalid-feedback">Veuillez entrer une adresse email valide.</div>
                             </div>
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="telephone" className="form-label">Téléphone <span className="text-danger">*</span></label>
-                                <input 
-                                    type="tel" 
-                                    className="form-control" 
-                                    id="telephone" 
+                                <input
+                                    type="tel"
+                                    className="form-control"
+                                    id="telephone"
                                     name="telephone"
                                     value={formData.telephone}
-                                    onChange={handleChange} 
-                                    required 
+                                    onChange={handleChange}
+                                    required
                                 />
                                 <div className="invalid-feedback">Veuillez entrer votre numéro de téléphone.</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="sujet" className="form-label">Sujet <span className="text-danger">*</span></label>
-                            <select 
-                                className="form-select" 
-                                id="sujet" 
-                                name="sujet" 
+                            <select
+                                className="form-select"
+                                id="sujet"
+                                name="sujet"
                                 value={formData.sujet}
                                 onChange={handleChange}
                                 required
                             >
                                 <option value="" disabled>Choisissez un sujet</option>
-                                <option value="devis">Demande de devis</option>
-                                <option value="info-produit">Information produit</option>
-                                <option value="technique">Question technique</option>
-                                <option value="livraison">Livraison</option>
-                                <option value="reclamation">Réclamation</option>
-                                <option value="autre">Autre</option>
+                                {formSubjects.map(s => (
+                                    <option key={s.value} value={s.value}>{s.label}</option>
+                                ))}
                             </select>
                             <div className="invalid-feedback">Veuillez sélectionner un sujet.</div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="message" className="form-label">Message <span className="text-danger">*</span></label>
-                            <textarea 
-                                className="form-control" 
-                                id="message" 
-                                name="message" 
-                                rows={6} 
+                            <textarea
+                                className="form-control"
+                                id="message"
+                                name="message"
+                                rows={6}
                                 value={formData.message}
                                 onChange={handleChange}
                                 required
@@ -359,14 +281,14 @@ const Contact: React.FC = () => {
                         </div>
                         <div className="mb-4">
                             <div className="form-check">
-                                <input 
-                                    className="form-check-input" 
-                                    type="checkbox" 
-                                    id="rgpd" 
-                                    name="rgpd" 
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    id="rgpd"
+                                    name="rgpd"
                                     checked={formData.rgpd}
                                     onChange={handleChange}
-                                    required 
+                                    required
                                 />
                                 <label className="form-check-label" htmlFor="rgpd">
                                     J'accepte que mes données personnelles soient utilisées pour me recontacter concernant ma demande. <span className="text-danger">*</span>
@@ -376,25 +298,31 @@ const Contact: React.FC = () => {
                         </div>
                         <div className="d-grid gap-2 d-md-block">
                             <button type="submit" className="btn btn-primary" disabled={submitting}>
-                                {submitting ? <span className="spinner-border spinner-border-sm me-2"></span> : <i className="bi bi-send me-2"></i>}
+                                {submitting ? <span className="spinner-border spinner-border-sm me-2"></span> : <i className="bi bi-send me-2" aria-hidden="true"></i>}
                                 {submitting ? 'Envoi...' : 'Envoyer le message'}
                             </button>
-                            <button 
-                                type="reset" 
-                                className="btn btn-outline-secondary ms-md-2" 
+                            <button
+                                type="reset"
+                                className="btn btn-outline-secondary ms-md-2"
                                 onClick={() => {
-                                    setFormData({ nom: '', entreprise: '', email: '', telephone: '', sujet: '', message: '', rgpd: false });
+                                    setFormData({ ...initialFormData });
                                     setValidated(false);
                                 }}
                             >
-                                <i className="bi bi-arrow-clockwise me-2"></i>Réinitialiser
+                                <i className="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Réinitialiser
                             </button>
                         </div>
                     </form>
                     {submitSuccess && (
                         <div id="successMessage" className="alert alert-success mt-3" role="alert">
-                            <i className="bi bi-check-circle me-2"></i>
+                            <i className="bi bi-check-circle me-2" aria-hidden="true"></i>
                             <strong>Message envoyé avec succès!</strong> Nous vous répondrons dans les plus brefs délais.
+                        </div>
+                    )}
+                    {submitError && (
+                        <div className="alert alert-danger mt-3" role="alert">
+                            <i className="bi bi-exclamation-triangle me-2" aria-hidden="true"></i>
+                            {submitError}
                         </div>
                     )}
                 </div>
@@ -405,17 +333,17 @@ const Contact: React.FC = () => {
                 <div className="container">
                     <div className="row text-center">
                         <div className="col-md-4 mb-3">
-                            <i className="bi bi-clock" style={{ fontSize: '2.5rem', color: 'var(--primary-red)' }}></i>
+                            <i className="bi bi-clock" style={{ fontSize: '2.5rem', color: 'var(--primary-red)' }} aria-hidden="true"></i>
                             <h5 className="mt-3">Réponse Rapide</h5>
                             <p className="text-muted">Nous répondons à vos demandes sous 24h ouvrées</p>
                         </div>
                         <div className="col-md-4 mb-3">
-                            <i className="bi bi-truck" style={{ fontSize: '2.5rem', color: 'var(--primary-red)' }}></i>
+                            <i className="bi bi-truck" style={{ fontSize: '2.5rem', color: 'var(--primary-red)' }} aria-hidden="true"></i>
                             <h5 className="mt-3">Livraison Garantie</h5>
                             <p className="text-muted">Livraison dans toute la région centre</p>
                         </div>
                         <div className="col-md-4 mb-3">
-                            <i className="bi bi-headset" style={{ fontSize: '2.5rem', color: 'var(--primary-red)' }}></i>
+                            <i className="bi bi-headset" style={{ fontSize: '2.5rem', color: 'var(--primary-red)' }} aria-hidden="true"></i>
                             <h5 className="mt-3">Support Dédié</h5>
                             <p className="text-muted">Une équipe d'experts à votre écoute</p>
                         </div>

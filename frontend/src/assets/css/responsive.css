@@ -39,7 +39,7 @@
     }
     
     .mobile-toggle:focus {
-        outline: none;
+        outline: 2px solid var(--primary-red); outline-offset: 2px;
     }
 
     /* Navigation Menu on Mobile */

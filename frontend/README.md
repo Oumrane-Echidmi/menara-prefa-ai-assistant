@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# Ménara Préfa — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend de l'assistant IA et du site vitrine Ménara Préfa.
 
-Currently, two official plugins are available:
+## Stack technique
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** + **TypeScript** + **Vite**
+- **React Router** (v7) pour la navigation SPA
+- **Bootstrap 5.3** + **Bootstrap Icons** (installés via npm)
+- **Leaflet** pour la carte des implantations (page Contact)
 
-## React Compiler
+## Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Développement local
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Le serveur de développement démarre sur `http://localhost:5173` par défaut.
+
+## Variables d'environnement
+
+Copiez `.env.example` vers `.env` et ajustez les valeurs :
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Description | Valeur par défaut |
+|---|---|---|
+| `VITE_API_BASE_URL` | URL de base du backend API (sans slash final) | `http://localhost:8080` |
+
+En production, définissez `VITE_API_BASE_URL` vers l'URL de votre serveur backend déployé.
+
+## Scripts disponibles
+
+| Commande | Description |
+|---|---|
+| `npm run dev` | Serveur de développement avec HMR |
+| `npm run build` | Build TypeScript + bundle production |
+| `npm run lint` | Lint ESLint |
+| `npm run preview` | Prévisualisation du build de production |
+
+## Structure du projet
+
+```
+src/
+├── assets/css/       # Feuilles de styles (style.css, responsive.css, chat.css, etc.)
+├── components/       # Composants réutilisables (layout, chat)
+├── data/             # Données typées statiques (navigation, produits, clients, etc.)
+├── pages/            # Pages principales (Home, Expertises, Contact, QHSE, References, ChatAI)
+├── services/         # Services API (ai.service.ts)
+├── App.tsx           # Routes principales
+└── main.tsx          # Point d'entrée
+```
+
+## Pages
+
+- **Accueil** (`/`) — Présentation, produits, certifications, clients
+- **Expertises** (`/expertises`) — Domaines d'expertise
+- **Références** (`/references`) — Clients, projets réalisés, témoignages
+- **QHSE** (`/qhse`) — Politique qualité, hygiène, sécurité, environnement
+- **Contact** (`/contact`) — Formulaire de contact, carte Leaflet, implantations
+- **Assistant IA** (`/chatAI`) — Chat avec l'assistant IA Ménara Préfa

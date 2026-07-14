@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-lg-4 mb-4">
-                        <h5><i className="bi bi-building-fill me-2"></i>Ménara Préfa</h5>
+                        <h5><i className="bi bi-building-fill me-2" aria-hidden="true"></i>Ménara Préfa</h5>
                         <p>
                             Première entreprise marocaine de BTP certifiée ISO 9001 v2008,
                             leader régional des matériaux de construction préfabriqués en
@@ -16,16 +16,16 @@ const Footer: React.FC = () => {
 
                         <h6 className="mt-4">Siège Social - Marrakech</h6>
                         <div className="contact-item">
-                            <i className="bi bi-geo-alt"></i>
+                            <i className="bi bi-geo-alt" aria-hidden="true"></i>
                             <span>Route d'Agadir, BP 4741 Hay Massira<br />Marrakech,
                                 Maroc</span>
                         </div>
                         <div className="contact-item">
-                            <i className="bi bi-telephone"></i>
+                            <i className="bi bi-telephone" aria-hidden="true"></i>
                             <span>+212 524 49 99 00 à 15</span>
                         </div>
                         <div className="contact-item">
-                            <i className="bi bi-envelope"></i>
+                            <i className="bi bi-envelope" aria-hidden="true"></i>
                             <a href="mailto:infomarrakech@menara-prefa.ma" className="text-white">infomarrakech@menara-prefa.ma</a>
                         </div>
                     </div>
@@ -34,16 +34,16 @@ const Footer: React.FC = () => {
                         <h5>Produits</h5>
                         <ul className="list-unstyled">
                             <li>
-                                <a href="#" className="text-white-50">Agglos</a>
+                                <Link to="/expertises" className="text-white-50">Agglos</Link>
                             </li>
                             <li>
-                                <a href="#" className="text-white-50">Hourdis & Planchers</a>
+                                <Link to="/expertises" className="text-white-50">Hourdis & Planchers</Link>
                             </li>
                             <li>
-                                <a href="#" className="text-white-50">Béton Prêt</a>
+                                <Link to="/expertises" className="text-white-50">Béton Prêt</Link>
                             </li>
                             <li>
-                                <a href="#" className="text-white-50">Revêtements</a>
+                                <Link to="/expertises" className="text-white-50">Revêtements</Link>
                             </li>
                         </ul>
                     </div>
@@ -60,18 +60,20 @@ const Footer: React.FC = () => {
                             <li>
                                 <Link to="/contact" className="text-white-50">Contact</Link>
                             </li>
-                            <li><a href="#" className="text-white-50">Numéro Vert</a></li>
+                            <li>
+                                <Link to="/contact" className="text-white-50">Numéro Vert</Link>
+                            </li>
                         </ul>
                     </div>
 
                     <div className="col-lg-4 mb-4">
                         <h5>Contact Commercial</h5>
                         <div className="contact-item">
-                            <i className="bi bi-envelope"></i>
+                            <i className="bi bi-envelope" aria-hidden="true"></i>
                             <a href="mailto:b.commercial@menara-prefa.ma" className="text-white">b.commercial@menara-prefa.ma</a>
                         </div>
                         <div className="contact-item">
-                            <i className="bi bi-telephone-fill"></i>
+                            <i className="bi bi-telephone-fill" aria-hidden="true"></i>
                             <strong>Numéro Vert: 0801008010</strong>
                         </div>
 
@@ -83,9 +85,9 @@ const Footer: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            
+
             <hr className="border-secondary mt-4 mb-4" style={{opacity: 0.2}} />
-            
+
             <div className="row">
                 <div className="col-md-6 text-center text-md-start">
                     <p className="mb-0 text-white-50 small">&copy; 2025 Ménara Préfa. Tous droits réservés.</p>
